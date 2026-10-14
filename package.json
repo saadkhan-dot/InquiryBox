@@ -1,0 +1,25 @@
+{
+  "name": "inquirybox",
+  "version": "1.0.0",
+  "description": "Customer enquiry management REST API for a local small business",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:init": "node src/scripts/initDb.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "rest-api",
+    "inquirybox"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.3"
+  }
+}

@@ -1,0 +1,325 @@
+{
+  "info": {
+    "_postman_id": "c1f10bc7-a124-4f81-81d3-34e569941a87",
+    "name": "InquiryBox API",
+    "description": "Postman Collection for InquiryBox - Customer Enquiry Management REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5050",
+      "type": "string"
+    },
+    {
+      "key": "enquiryId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "API Root (Welcome)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        },
+        "description": "API entrypoint with welcome message and available endpoints"
+      },
+      "response": []
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "health"
+          ]
+        },
+        "description": "Verifies that the server and API are operational"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Enquiry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_name\": \"Sarah Jenkins\",\n  \"email\": \"sarah.j@example.com\",\n  \"phone\": \"+1-555-0199\",\n  \"subject\": \"Inquiry about catering packages\",\n  \"message\": \"Hi, I am planning a 50-person family reunion next month and would like details on your buffet menu options.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ]
+        },
+        "description": "Submits a new customer enquiry (status defaults to 'new')"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201) pm.collectionVariables.set('enquiryId', pm.response.json().data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get All Enquiries",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ]
+        },
+        "description": "Retrieves all submitted enquiries sorted by creation date descending"
+      },
+      "response": []
+    },
+    {
+      "name": "Filter Enquiries by Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries?status=new",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "new",
+              "description": "Filter enquiries by status: 'new', 'in_progress', or 'resolved'"
+            }
+          ]
+        },
+        "description": "Filters enquiries by status parameter (new, in_progress, resolved)"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Enquiry By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries/{{enquiryId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries",
+            "{{enquiryId}}"
+          ]
+        },
+        "description": "Retrieves a specific enquiry by its numeric primary key"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Enquiry Status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"in_progress\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries/{{enquiryId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries",
+            "{{enquiryId}}",
+            "status"
+          ]
+        },
+        "description": "Updates an enquiry status to 'new', 'in_progress', or 'resolved'"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Enquiry",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries/{{enquiryId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries",
+            "{{enquiryId}}"
+          ]
+        },
+        "description": "Deletes an enquiry by ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Invalid Create Fields (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_name\": \"\",\n  \"email\": \"invalid-email\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ]
+        },
+        "description": "Demonstrates 400 Bad Request response when required fields are missing or invalid"
+      },
+      "response": []
+    },
+    {
+      "name": "Not Found Demo (404 Not Found)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries/999999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries",
+            "999999999"
+          ]
+        },
+        "description": "Demonstrates 404 Not Found response when querying a non-existent enquiry"
+      },
+      "response": []
+    },
+    {
+      "name": "Invalid ID (400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries/0",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries",
+            "0"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Unsupported Status Filter (400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries?status=closed",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Malformed JSON (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/enquiries",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enquiries"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{"
+        }
+      },
+      "response": []
+    }
+  ]
+}

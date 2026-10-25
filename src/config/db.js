@@ -1,9 +1,5 @@
 const { Pool } = require('pg');
 
-/**
- * Configure PostgreSQL connection pool using environment variables.
- * Using a connection pool ensures efficient connection reuse across HTTP requests.
- */
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -14,7 +10,7 @@ const pool = new Pool({
 
 // Event listener for unexpected errors on idle database clients
 pool.on('error', (err) => {
-  console.error('[Database Pool Error]:', err.message);
+  console.error('[Database Pool Error]:', err.code || err.name || 'Error');
 });
 
 module.exports = {

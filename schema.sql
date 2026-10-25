@@ -5,6 +5,16 @@
 -- ==============================================================================
 
 -- Safe to run repeatedly: existing enquiry records are preserved.
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role VARCHAR(10) NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS enquiries (
     id SERIAL PRIMARY KEY,
     customer_name VARCHAR(100) NOT NULL,
@@ -16,6 +26,9 @@ CREATE TABLE IF NOT EXISTS enquiries (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE enquiries ADD COLUMN IF NOT EXISTS user_id BIGINT REFERENCES users(id) ON DELETE SET NULL;
+CREATE INDEX IF NOT EXISTS idx_enquiries_user_id ON enquiries(user_id);
 
 -- Optional index on status to optimize filtering queries
 CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries(status);

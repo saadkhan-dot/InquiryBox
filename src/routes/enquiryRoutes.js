@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const enquiryController = require('../controllers/enquiryController');
+const { authenticate } = require('../middleware/auth');
+router.use(authenticate);
 
 // 1. Create a customer enquiry
 router.post('/', enquiryController.createEnquiry);

@@ -15,9 +15,50 @@
       "key": "enquiryId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Sam Lee\",\n  \"email\": \"sam@example.com\",\n  \"password\": \"ChangeThis12345\"\n}"
+        },
+        "url": "{{baseUrl}}/api/auth/register"
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"sam@example.com\",\n  \"password\": \"ChangeThis12345\"\n}"
+        },
+        "url": "{{baseUrl}}/api/auth/login"
+      },
+      "response": []
+    },
     {
       "name": "API Root (Welcome)",
       "request": {
@@ -321,5 +362,15 @@
       },
       "response": []
     }
-  ]
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
 }
